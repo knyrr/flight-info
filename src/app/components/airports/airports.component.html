@@ -1,0 +1,33 @@
+<p>Norvegian Airports</p>
+
+<!-- <select>
+  @for (airport of airports(); track $index) {
+  <option>
+    {{ airport.name }}
+  </option>
+  }
+</select> -->
+
+<!-- <input type="text" placeholder="Search airports" [(ngModel)]="searchTerm" />
+
+<ul>
+  @for (airport of airports() | filter : searchTerm; track $index) {
+  <li>{{ airport.name }}</li>
+  }
+</ul> -->
+
+<form>
+  <label>Filter airports</label>
+  <input
+    name="searchTerm"
+    type="text"
+    placeholder="Search airports"
+    [(ngModel)]="searchTerm"
+  />
+</form>
+
+<ul>
+  @for (airport of airports() | filterAirports : searchTerm(); track $index) {
+  <li>{{ airport.name }}</li>
+  }
+</ul>
