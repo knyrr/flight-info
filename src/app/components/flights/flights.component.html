@@ -1,0 +1,20 @@
+<h3>Departures from {{ this.airportService.selectedAirport()?.name }}</h3>
+
+<ul class="flights-list">
+  @for (flight of flights(); track $index) {
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Flight to {{ flight.arr_iata }}</mat-card-title>
+      <mat-card-subtitle
+        >Operated by {{ flight.airline_iata }}</mat-card-subtitle
+      >
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        Departs on
+        {{ flight.dep_time | date : "dd MMM yyyy 'at' HH:mm" }}
+      </p>
+    </mat-card-content>
+  </mat-card>
+  }
+</ul>

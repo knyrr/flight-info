@@ -1,0 +1,15 @@
+<div class="titleContainer">
+  <h1>Flights in Norway</h1>
+</div>
+<div class="container">
+  <aside class="aside">
+    <app-map></app-map>
+  </aside>
+  <main class="main">
+    <app-airports class="airports"></app-airports>
+    @if (this.airportService.selectedAirport()) {<app-flights
+      class="flights"
+    ></app-flights
+    >}
+  </main>
+</div>

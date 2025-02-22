@@ -1,0 +1,16 @@
+<google-map
+  [center]="this.mapService.center()"
+  [zoom]="zoom"
+  mapId="DEMO_MAP_ID"
+>
+  @for (airport of this.airportService.airports(); track airport.iata_code) {
+  <map-advanced-marker
+    [position]="{
+            lat: airport.lat,
+            lng: airport.lng,
+          }"
+    [title]="airport.name"
+    (mapClick)="selectAirport(airport)"
+  ></map-advanced-marker>
+  }
+</google-map>
