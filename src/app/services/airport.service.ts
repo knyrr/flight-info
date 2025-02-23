@@ -14,6 +14,7 @@ export class AirportService {
   private apiKey = environment.airLabsApiKey;
   url = `https://airlabs.co/api/v9/airports?country_code=no&api_key=${this.apiKey}`;
   activeAirport = signal<Airport | null>(null);
+  airports = signal<Array<Airport>>([]);
 
   getMockAirports() {
     return this.mockAirports.filter((airport) => airport.iata_code !== null);

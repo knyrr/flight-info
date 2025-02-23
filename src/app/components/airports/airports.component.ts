@@ -1,9 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { AirportService } from '../../services/airport.service';
 import { Airport } from '../../model/airport.type';
-import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { catchError, tap } from 'rxjs';
+import { catchError, map, tap, throwError } from 'rxjs';
 import { FilterAirportsPipe } from '../../pipes/filter-airports.pipe';
 import { environment } from '../../../environments/environment';
 
@@ -15,31 +14,41 @@ import { environment } from '../../../environments/environment';
 })
 export class AirportsComponent implements OnInit {
   airportService = inject(AirportService);
-  airports = signal<Array<Airport>>([]);
   searchTerm = signal('');
 
   ngOnInit(): void {
-    if (environment.isRequestLive === true) {
+    if (environment.isRequestLive) {
       console.log('Requesting live airports');
+
       this.airportService
         .getLiveAirports()
         .pipe(
-          tap((airports: any) => this.airports.set(airports)),
-          tap((airports: any) =>
-            this.airportService.activeAirport.set(airports[0])
-          ),
+          map((airports: Airport[]) => {
+            this.airportService.airports.set(airports);
+            const foundAirport = airports.find(
+              (airport) => airport.iata_code === 'OSL'
+            );
+            this.airportService.activeAirport.set(
+              foundAirport || airports[0] || null
+            );
+
+            return airports;
+          }),
           catchError((error) => {
-            console.error(error);
-            throw error;
+            console.error('Error fetching live airports:', error);
+            return throwError(() => error);
           })
         )
         .subscribe();
     } else {
-      let airports: Airport[] = this.airportService.getMockAirports();
-      this.airports.set(airports);
-      if (airports.length > 0) {
-        this.airportService.activeAirport.set(airports[0]);
-      }
+      const airports: Airport[] = this.airportService.getMockAirports();
+      this.airportService.airports.set(airports);
+      const foundAirport = airports.find(
+        (airport) => airport.iata_code === 'OSL'
+      );
+      this.airportService.activeAirport.set(
+        foundAirport || airports[0] || null
+      );
     }
   }
 

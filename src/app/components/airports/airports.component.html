@@ -27,7 +27,8 @@
 </form>
 
 <ul>
-  @for (airport of airports() | filterAirports : searchTerm(); track $index) {
+  @for (airport of this.airportService.airports() | filterAirports :
+  searchTerm(); track $index) {
   <li
     class="clickable"
     [class.activeAirport]="airport === this.airportService.activeAirport()"
