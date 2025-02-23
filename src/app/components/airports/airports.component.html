@@ -28,6 +28,12 @@
 
 <ul>
   @for (airport of airports() | filterAirports : searchTerm(); track $index) {
-  <li>{{ airport.name }}</li>
+  <li
+    class="clickable"
+    [class.activeAirport]="airport === this.airportService.activeAirport()"
+    (click)="selectAirport(airport)"
+  >
+    {{ airport.name }}
+  </li>
   }
 </ul>

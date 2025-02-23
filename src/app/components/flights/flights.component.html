@@ -1,1 +1,9 @@
-<p>flights works!</p>
+<h2>Flights from {{ this.airportService.activeAirport()?.iata_code }}</h2>
+<ul>
+  @for (flight of flights(); track $index) {
+  <li>
+    {{ flight.dep_iata }} -> {{ flight.arr_iata }} departs at
+    {{ flight.dep_time }}
+  </li>
+  }
+</ul>

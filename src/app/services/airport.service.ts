@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Airport } from '../model/airport.type';
 import { norwegianAirports } from '../mocks/norwegian-airports';
 import { HttpClient } from '@angular/common/http';
@@ -13,15 +13,21 @@ export class AirportService {
   mockAirports: Array<Airport> = norwegianAirports.response;
   private apiKey = environment.airLabsApiKey;
   url = `https://airlabs.co/api/v9/airports?country_code=no&api_key=${this.apiKey}`;
+  activeAirport = signal<Airport | null>(null);
 
-  constructor() {}
+  //constructor() {}
 
   getAirports() {
-    console.log(this.url);
     // Mock request
-    return this.mockAirports;
+    return this.mockAirports.filter((airport) => airport.iata_code !== null);
 
     // Live request
-    // return this.http.get<{ response: any }>(this.url).pipe(map((data) => data.response)); */
+    // return this.http
+    //   .get<{ response: any }>(this.url)
+    //   .pipe(
+    //     map((data) =>
+    //       data.response.filter((airport: any) => airport.iata_code !== null)
+    //     )
+    //   );
   }
 }
