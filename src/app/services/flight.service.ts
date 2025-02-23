@@ -11,11 +11,17 @@ import { Airport } from '../model/airport.type';
 })
 export class FlightService {
   http = inject(HttpClient);
-  mockFlights: Array<Flight> = osloSchedule.response;
+  mockFlights: Array<Flight> = osloSchedule.response.map((flight) => ({
+    ...flight,
+    dep_time: new Date(flight.dep_time),
+    dep_time_utc: new Date(flight.dep_time_utc),
+  }));
   private apiKey = environment.airLabsApiKey;
   url = `https://airlabs.co/api/v9/schedules?api_key=${this.apiKey}&dep_iata=`;
-  //https://airlabs.co/api/v9/schedules?dep_iata=OSL&api_key=df6b2557-a999-4c57-a44f-813870720b1a
 
+  getMockFlights() {
+    return this.mockFlights.slice(0, 5);
+  }
   getLiveFlights(iataCode: string) {
     return this.http
       .get<{ response: any }>(this.url + iataCode)
@@ -26,8 +32,5 @@ export class FlightService {
             .slice(0, 5)
         )
       );
-  }
-  getMockFlights() {
-    return this.mockFlights.slice(0, 5);
   }
 }

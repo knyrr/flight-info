@@ -3,10 +3,11 @@ import { FlightService } from '../../services/flight.service';
 import { Flight } from '../../model/flight.type';
 import { AirportService } from '../../services/airport.service';
 import { environment } from '../../../environments/environment';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-flights',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './flights.component.html',
   styleUrl: './flights.component.css',
 })

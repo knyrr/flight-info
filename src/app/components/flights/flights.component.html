@@ -2,8 +2,8 @@
 <ul>
   @for (flight of flights(); track $index) {
   <li>
-    {{ flight.dep_iata }} -> {{ flight.arr_iata }} departs at
-    {{ flight.dep_time }}
+    {{ flight.dep_iata }} -> {{ flight.arr_iata }} departs on
+    {{ flight.dep_time | date : "dd MMM yyyy 'at' HH:mm" }}
   </li>
   }
 </ul>

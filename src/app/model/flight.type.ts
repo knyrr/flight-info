@@ -8,8 +8,8 @@ export type Flight = {
   dep_icao: string;
   dep_terminal: string | null;
   dep_gate: string | null;
-  dep_time: string;
-  dep_time_utc: string;
+  dep_time: Date;
+  dep_time_utc: Date;
   dep_estimated?: string;
   dep_estimated_utc?: string;
   dep_actual?: string;
