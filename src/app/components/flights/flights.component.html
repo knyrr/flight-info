@@ -1,4 +1,4 @@
-<h3>Flights from {{ this.airportService.activeAirport()?.name }}</h3>
+<h3>Flights from {{ this.airportService.selectedAirport()?.name }}</h3>
 <ul>
   @for (flight of flights(); track $index) {
   <li>

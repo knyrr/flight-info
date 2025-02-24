@@ -1,9 +1,8 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { AirportService } from '../../services/airport.service';
 import { Airport } from '../../model/airport.type';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { catchError, map, Observable, startWith, tap, throwError } from 'rxjs';
-import { FilterAirportsPipe } from '../../pipes/filter-airports.pipe';
 import { environment } from '../../../environments/environment';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,7 +14,6 @@ import { AsyncPipe } from '@angular/common';
   selector: 'app-airports',
   imports: [
     FormsModule,
-    FilterAirportsPipe,
     MatFormFieldModule,
     MatSidenavModule,
     MatInputModule,
@@ -35,6 +33,16 @@ export class AirportsComponent implements OnInit {
   myControl = new FormControl<string | Airport>('');
   filteredOptions = new Observable<Airport[]>();
 
+  constructor() {
+    effect(() => {
+      const airport = this.airportService.selectedAirport();
+      if (airport) {
+        this.myControl.setValue(airport);
+        console.log(`Input updated: ${JSON.stringify(airport)}`);
+      }
+    });
+  }
+
   ngOnInit(): void {
     if (environment.isRequestLive) {
       console.log('Requesting live airports');
@@ -44,13 +52,6 @@ export class AirportsComponent implements OnInit {
         .pipe(
           map((airports: Airport[]) => {
             this.airportService.airports.set(airports);
-            const foundAirport = airports.find(
-              (airport) => airport.iata_code === 'OSL'
-            );
-            this.airportService.activeAirport.set(
-              foundAirport || airports[0] || null
-            );
-
             return airports;
           }),
           catchError((error) => {
@@ -62,12 +63,6 @@ export class AirportsComponent implements OnInit {
     } else {
       const airports: Airport[] = this.airportService.getMockAirports();
       this.airportService.airports.set(airports);
-      const foundAirport = airports.find(
-        (airport) => airport.iata_code === 'OSL'
-      );
-      this.airportService.activeAirport.set(
-        foundAirport || airports[0] || null
-      );
     }
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
@@ -92,8 +87,9 @@ export class AirportsComponent implements OnInit {
     return airport && airport.name ? airport.name : '';
   }
 
-  selectAirport(airport: any) {
-    this.airportService.activeAirport.set(airport);
-    console.log(airport);
+  selectAirport(event: any) {
+    const selectedAirport = event.option.value;
+    this.airportService.selectedAirport.set(selectedAirport);
+    console.log('Selected:', selectedAirport);
   }
 }

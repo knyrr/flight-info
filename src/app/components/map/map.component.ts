@@ -1,21 +1,8 @@
-import {
-  Component,
-  OnInit,
-  signal,
-  OnDestroy,
-  effect,
-  inject,
-} from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { GoogleMapsModule } from '@angular/google-maps';
-import { environment } from '../../../environments/environment';
 import { AirportService } from '../../services/airport.service';
 import { Airport } from '../../model/airport.type';
-
-declare global {
-  interface Window {
-    initMap: () => void;
-  }
-}
+import { MapService } from '../../services/map.service';
 
 @Component({
   selector: 'app-map',
@@ -24,57 +11,32 @@ declare global {
   templateUrl: './map.component.html',
   styleUrl: './map.component.css',
 })
-export class MapComponent implements OnInit, OnDestroy {
+export class MapComponent {
+  mapService = inject(MapService);
   airportService = inject(AirportService);
-  isMapApiLoaded = signal<boolean>(false);
-  center: google.maps.LatLngLiteral = { lat: 60.7905397, lng: 9.0333118 };
   zoom = 6;
-  markers: google.maps.LatLngLiteral[] = [];
+  //markers: google.maps.LatLngLiteral[] = [];
+  //airports = computed(() => this.airportService.airports());
 
-  ngOnInit() {
-    this.loadGoogleMapsScript();
+  constructor() {
+    effect(() => {
+      const airport = this.airportService.selectedAirport();
+      if (airport) {
+        this.mapService.center.set({ lat: airport.lat, lng: airport.lng });
+        console.log(
+          `Map center updated: ${JSON.stringify(this.mapService.center())}`
+        );
+      }
+    });
   }
 
-  ngAfterViewInit(): void {
-    window.initMap = this.initMap.bind(this);
-  }
-
-  ngOnDestroy(): void {
-    window.initMap = null as any;
-  }
-
-  private loadGoogleMapsScript() {
-    if (document.getElementById('google-maps-script')) {
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.id = 'google-maps-script';
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${environment.googleMapsKey}&loading=async&&libraries=marker&callback=initMap`;
-    script.async = true;
-    script.defer = true;
-
-    script.onerror = (error) => {
-      console.error('Failed to load Google Maps script:', error);
-    };
-
-    document.body.appendChild(script);
-  }
-
-  private initMap() {
-    if (window.google && window.google.maps) {
-      this.isMapApiLoaded.set(true);
-    } else {
-      console.error('Google Maps API failed to load.');
-    }
-  }
-
-  showFlights(airport: Airport) {
-    this.airportService.activeAirport.set(airport);
+  selectAirport(airport: Airport) {
+    console.log('Selected airport:', airport);
+    this.airportService.selectedAirport.set(airport);
   }
 
   getMarkerPin(airport: any): google.maps.marker.PinElement {
-    const activeAirport = this.airportService.activeAirport();
+    const activeAirport = this.airportService.selectedAirport();
 
     return new google.maps.marker.PinElement({
       glyphColor: 'blue',

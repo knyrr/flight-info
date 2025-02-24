@@ -1,23 +1,6 @@
 <h2>Norvegian Airports</h2>
-
-<!-- <select>
-  @for (airport of airports(); track $index) {
-  <option>
-    {{ airport.name }}
-  </option>
-  }
-</select> -->
-
-<!-- <input type="text" placeholder="Search airports" [(ngModel)]="searchTerm" />
-
-<ul>
-  @for (airport of airports() | filter : searchTerm; track $index) {
-  <li>{{ airport.name }}</li>
-  }
-</ul> -->
-
-<form class="example-form">
-  <mat-form-field class="example-full-width">
+<form class="airport-form">
+  <mat-form-field class="airport-full-width">
     <mat-label>Select an airport</mat-label>
     <input
       type="text"
@@ -27,33 +10,14 @@
       [formControl]="myControl"
       [matAutocomplete]="auto"
     />
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      [displayWith]="displayFn"
+      (optionSelected)="selectAirport($event)"
+    >
       @for (option of filteredOptions | async ; track option) {
       <mat-option [value]="option">{{ option.name }}</mat-option>
       }
     </mat-autocomplete>
   </mat-form-field>
 </form>
-<!-- 
-<form>
-  <label>Filter airports</label>
-  <input
-    name="searchTerm"
-    type="text"
-    placeholder="Search airports"
-    [(ngModel)]="searchTerm"
-  />
-</form>
-
-<ul>
-  @for (airport of this.airportService.airports() | filterAirports :
-  searchTerm(); track $index) {
-  <li
-    class="clickable"
-    [class.activeAirport]="airport === this.airportService.activeAirport()"
-    (click)="selectAirport(airport)"
-  >
-    {{ airport.name }}
-  </li>
-  }
-</ul> -->

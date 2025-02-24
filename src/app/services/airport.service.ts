@@ -13,7 +13,7 @@ export class AirportService {
   mockAirports: Array<Airport> = norwegianAirports.response;
   private apiKey = environment.airLabsApiKey;
   url = `https://airlabs.co/api/v9/airports?country_code=no&api_key=${this.apiKey}`;
-  activeAirport = signal<Airport | null>(null);
+  selectedAirport = signal<Airport | null>(null);
   airports = signal<Array<Airport>>([]);
 
   getMockAirports() {

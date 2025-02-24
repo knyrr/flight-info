@@ -1,6 +1,9 @@
-@if (isMapApiLoaded()) {
-<google-map [center]="center" [zoom]="zoom" mapId="airport-map">
-  @for (airport of this.airportService.airports(); track $index) {
+<google-map
+  [center]="this.mapService.center()"
+  [zoom]="zoom"
+  mapId="airport-map"
+>
+  @for (airport of this.airportService.airports(); track airport.iata_code) {
   <map-advanced-marker
     [position]="{
             lat: airport.lat,
@@ -8,8 +11,7 @@
           }"
     [title]="airport.name"
     [content]="getMarkerPin(airport).element"
-    (mapClick)="showFlights(airport)"
+    (mapClick)="selectAirport(airport)"
   ></map-advanced-marker>
   }
 </google-map>
-}

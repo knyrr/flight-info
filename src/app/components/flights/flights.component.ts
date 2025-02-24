@@ -18,7 +18,7 @@ export class FlightsComponent {
 
   constructor() {
     effect(() => {
-      const airport = this.airportService.activeAirport();
+      const airport = this.airportService.selectedAirport();
       if (airport && airport.iata_code) {
         if (environment.isRequestLive === true) {
           this.flightService
