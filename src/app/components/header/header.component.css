@@ -1,9 +1,17 @@
-header {
+ul {
   display: flex;
   padding-inline: 16px;
   padding-block: 8px;
+  margin: 0%;
   background-color: #333;
   color: white;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 16px;
+  list-style: none;
+}
+
+a {
+  color: white;
+  text-decoration: none;
 }
