@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AirportsComponent } from '../components/airports/airports.component';
 import { FlightsComponent } from '../components/flights/flights.component';
 import { MapComponent } from '../components/map/map.component';
+import { AirportService } from '../services/airport.service';
 
 @Component({
   selector: 'app-home',
@@ -9,4 +10,6 @@ import { MapComponent } from '../components/map/map.component';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-export class HomeComponent {}
+export class HomeComponent {
+  airportService = inject(AirportService);
+}

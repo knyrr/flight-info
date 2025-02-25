@@ -4,10 +4,11 @@ import { Flight } from '../../model/flight.type';
 import { AirportService } from '../../services/airport.service';
 import { environment } from '../../../environments/environment';
 import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-flights',
-  imports: [CommonModule],
+  imports: [CommonModule, MatCardModule],
   templateUrl: './flights.component.html',
   styleUrl: './flights.component.css',
 })
