@@ -18,7 +18,8 @@ export const environment = {
 
 ## Screenshot
 
-![Screenshot 2025-02-28 at 15-56-26 FlightInfo(1)](https://github.com/user-attachments/assets/317b5bb3-229c-465d-8578-4c3c12cb0ca9)
+![Screenshot 2025-02-28 at 15-56-26 FlightInfo](https://github.com/user-attachments/assets/ea0f762e-a2b0-451d-bc57-4335e90ce7e5)
+
 
 
 ## Development server
